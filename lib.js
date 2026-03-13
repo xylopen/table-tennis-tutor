@@ -157,8 +157,13 @@ function getCurrentLesson(progress) {
   return LESSONS.find(l => l.id === progress.currentLesson) || LESSONS[0];
 }
 
+// 生成回调 URL
+function makeCallbackUrl(action, lessonId, baseUrl) {
+  return `${baseUrl}/callback?action=${action}&lesson=${lessonId}`;
+}
+
 // 发送课程卡片内容
-function getLessonCard(lesson) {
+function getLessonCard(lesson, baseUrl = 'https://table-tennis-tutor-production.up.railway.app') {
   return {
     config: { wide_screen_mode: true },
     header: {
@@ -181,7 +186,7 @@ function getLessonCard(lesson) {
             tag: 'button',
             text: { tag: 'plain_text', content: '✅ 完成本课' },
             type: 'primary',
-            value: { action: 'complete', lesson: lesson.id }
+            url: makeCallbackUrl('complete', lesson.id, baseUrl)
           }
         ]
       }
@@ -189,8 +194,8 @@ function getLessonCard(lesson) {
   };
 }
 
-// 确认完成卡片 - 带按钮
-function getConfirmCard(lessonId) {
+// 确认完成卡片 - URL 按钮
+function getConfirmCard(lessonId, baseUrl = 'https://table-tennis-tutor-production.up.railway.app') {
   return {
     config: { wide_screen_mode: true },
     header: {
@@ -200,7 +205,7 @@ function getConfirmCard(lessonId) {
     elements: [
       {
         tag: 'div',
-        text: { tag: 'lark_md', content: `你已经完成第 **${lessonId}课** 的练习了吗？\n\n点击确认后，我将为你解锁下一课～\n\n💡 或者直接回复"确认完成"` }
+        text: { tag: 'lark_md', content: `你已经完成第 **${lessonId}课** 的练习了吗？\n\n点击下方按钮确认，我将为你解锁下一课～` }
       },
       {
         tag: 'action',
@@ -209,15 +214,13 @@ function getConfirmCard(lessonId) {
             tag: 'button',
             text: { tag: 'plain_text', content: '✅ 确认完成' },
             type: 'primary',
-            url: 'https://open.feishu.cn',
-            value: { action: 'confirm_complete', lesson: lessonId }
+            url: makeCallbackUrl('confirm_complete', lessonId, baseUrl)
           },
           {
             tag: 'button',
             text: { tag: 'plain_text', content: '⏳ 稍后再说' },
             type: 'default',
-            url: 'https://open.feishu.cn',
-            value: { action: 'later' }
+            url: makeCallbackUrl('later', lessonId, baseUrl)
           }
         ]
       }
