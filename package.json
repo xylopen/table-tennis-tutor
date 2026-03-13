@@ -1,0 +1,17 @@
+{
+  "name": "table-tennis-tutor",
+  "version": "1.0.0",
+  "description": "台球（美式落袋）系统化练习助手",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.13.6",
+    "body-parser": "^1.20.4",
+    "express": "^4.22.1"
+  },
+  "author": "青青",
+  "license": "MIT"
+}
